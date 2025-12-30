@@ -1,7 +1,11 @@
 // Simple API test script to verify all requirements
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:3001';
+// Use deployed backend URL for production testing
+const BASE_URL = 'https://pastebin-lite-backend-6uu2.onrender.com';
+
+// For local testing, uncomment the line below:
+// const BASE_URL = 'http://localhost:3001';
 
 async function testAPI() {
   console.log('🧪 Testing Pastebin Lite API...\n');

@@ -96,7 +96,7 @@ const Footer = () => {
                   Health Check
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <span className="text-gray-400 text-sm">
                   POST /api/pastes
                 </span>
@@ -105,7 +105,7 @@ const Footer = () => {
                 <span className="text-gray-400 text-sm">
                   GET /api/pastes/:id
                 </span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -138,7 +138,7 @@ const Footer = () => {
                 Terms
               </a>
               <a
-                href="mailto:harshdeep@example.com"
+                href="mailto:harshdeepkkhartade1010@gmail.com"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Contact

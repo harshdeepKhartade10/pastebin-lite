@@ -2,15 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const compression = require('compression');
+const compression =require('compression');
 const morgan = require('morgan');
 require('dotenv').config();
 
-const pasteRoutes = require('./routes/pastes');
-const healthRoutes = require('./routes/health');
+const pasteRoutes =require('./routes/pastes');
+const healthRoutes= require('./routes/health');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT =process.env.PORT || 3001;
 
 // Security middleware
 app.use(helmet({
@@ -38,9 +38,9 @@ if (process.env.NODE_ENV !== 'test') {
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: { error: 'Too many requests, please try again later.' },
+  message:{ error: 'Too many requests, please try again later.' },
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders:false,
 });
 app.use('/api/', limiter);
 
@@ -55,7 +55,7 @@ app.use(cors({
 }));
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Set Content-Type for all API responses
@@ -66,7 +66,7 @@ app.use('/api', (req, res, next) => {
 
 // Routes
 app.use('/api/healthz', healthRoutes);
-app.use('/api/pastes', pasteRoutes);
+app.use('/api/pastes',pasteRoutes);
 
 // Handle HTML paste viewing route
 app.get('/p/:id', async (req, res) => {
@@ -78,7 +78,7 @@ app.get('/p/:id', async (req, res) => {
       sanitizeId,
       escapeHtml
     } = require('./utils/helpers');
-    const { getPaste, updatePaste, deletePaste } = require('./services/redis');
+    const { getPaste,updatePaste, deletePaste } = require('./services/redis');
 
     const rawId = req.params.id;
     const id = sanitizeId(rawId);
@@ -88,14 +88,14 @@ app.get('/p/:id', async (req, res) => {
     }
 
     const currentTime = getCurrentTime(req);
-    const paste = await getPaste(id);
+    const paste = await  getPaste(id);
     
     if (!paste) {
       return res.status(404).send(createErrorPage('Paste Not Found', 'The paste you\'re looking for doesn\'t exist.'));
     }
 
     // Check if paste has expired
-    if (isExpired(paste, currentTime)) {
+    if (isExpired(paste,currentTime)){
       await deletePaste(id);
       return res.status(404).send(createErrorPage('Paste Expired', 'This paste has expired and is no longer available.'));
     }
@@ -107,7 +107,7 @@ app.get('/p/:id', async (req, res) => {
     }
 
     // Increment view count
-    const updatedViewCount = paste.view_count + 1;
+    const updatedViewCount =paste.view_count + 1;
     const updateSuccess = await updatePaste(id, { view_count: updatedViewCount });
 
     if (!updateSuccess) {
@@ -120,9 +120,9 @@ app.get('/p/:id', async (req, res) => {
     }
 
     const escapedContent = escapeHtml(paste.content);
-    const remainingViews = paste.max_views ? Math.max(0, paste.max_views - updatedViewCount) : null;
+    const remainingViews =paste.max_views ? Math.max(0, paste.max_views - updatedViewCount) : null;
 
-    res.status(200).send(createPastePage(id, escapedContent, paste, updatedViewCount, remainingViews));
+    res.status(200).send(createPastePage(id, escapedContent, paste, updatedViewCount , remainingViews));
 
   } catch (error) {
     console.error('View paste error:', error);
@@ -132,7 +132,7 @@ app.get('/p/:id', async (req, res) => {
 
 // 404 handler for API routes
 app.use('/api/*', (req, res) => {
-  res.status(404).json({ error: 'API endpoint not found' });
+  res.status(404).json({error: 'API endpoint not found' });
 });
 
 // Root route - redirect to frontend in production
@@ -142,7 +142,7 @@ app.get('/', (req, res) => {
 });
 
 // Catch-all handler for non-API routes - redirect to frontend
-app.get('*', (req, res) => {
+app.get('*', (req, res)=>{
   // Don't redirect API routes
   if (req.path.startsWith('/api/') || req.path.startsWith('/p/')) {
     return res.status(404).json({ error: 'Route not found' });
@@ -155,7 +155,7 @@ app.get('*', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('Error:',err);
   
   if (err.name === 'ValidationError') {
     return res.status(400).json({ 
@@ -178,7 +178,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-if (require.main === module) {
+if (require.main === module){
   app.listen(PORT, () => {
     console.log(` Server running on port ${PORT}`);
     console.log(` Health check: http://localhost:${PORT}/api/healthz`);
@@ -191,7 +191,7 @@ module.exports = app;
 /**
  * Create HTML page for paste viewing
  */
-function createPastePage(id, content, paste, viewCount, remainingViews) {
+function createPastePage(id,content, paste, viewCount, remainingViews) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,7 +212,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             background: white;
             border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            overflow:hidden;
         }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -227,7 +227,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             background: #f8f9fa;
             border: 1px solid #e9ecef;
             border-radius: 8px;
-            padding: 25px;
+            padding:25px;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             line-height: 1.6;
@@ -242,7 +242,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             padding: 20px;
-            background: #f8f9fa;
+            background : #f8f9fa;
             border-radius: 8px;
             font-size: 0.9rem;
             color: #6c757d;
@@ -251,7 +251,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
         .meta-label { font-weight: 600; color: #495057; margin-bottom: 5px; }
         .actions {
             padding: 30px;
-            text-align: center;
+            text-align : center;
             background: #f8f9fa;
         }
         .btn {
@@ -265,7 +265,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             transition: transform 0.2s, box-shadow 0.2s;
             margin: 0 10px;
         }
-        .btn:hover {
+        .btn:hover{
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
@@ -274,7 +274,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
         }
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
-            .container { margin: 10px; }
+            .container{ margin: 10px; }
             .content-container { padding: 20px; }
             .meta { grid-template-columns: 1fr; }
         }
@@ -334,7 +334,7 @@ function createErrorPage(title, message) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${title}</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -342,7 +342,7 @@ function createErrorPage(title, message) {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding : 20px;
         }
         .error-container {
             background: white;
@@ -350,7 +350,7 @@ function createErrorPage(title, message) {
             border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 500px;
+            max-width:500px;
         }
         .error-icon { font-size: 4rem; margin-bottom: 20px; }
         .error-title { color: #dc3545; font-size: 2rem; margin-bottom: 15px; }

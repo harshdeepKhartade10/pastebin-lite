@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 const NotFoundPage = () => {
   const navigate = useNavigate()
 
-  const handleGoHome = () => {
+  const handleGoHome = () =>{
     navigate('/')
   }
 

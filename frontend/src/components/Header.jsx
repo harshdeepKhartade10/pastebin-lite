@@ -1,42 +1,42 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+const Header = () =>{
+  const [isMobileMenuOpen,setIsMobileMenuOpen] = useState(false)
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const scrollToTop = () =>{
+    window.scrollTo({top: 0, behavior: 'smooth' })
     setIsMobileMenuOpen(false)
   }
 
-  const scrollToFeatures = () => {
-    const featuresElement = document.getElementById('features')
-    if (featuresElement) {
+  const scrollToFeatures =() =>{
+    const featuresElement =document.getElementById('features')
+    if (featuresElement){
       featuresElement.scrollIntoView({ behavior: 'smooth' })
     }
     setIsMobileMenuOpen(false)
   }
 
-  const focusPasteInput = () => {
+  const focusPasteInput = () =>{
     // First scroll to top smoothly
     window.scrollTo({ top: 0, behavior: 'smooth' })
     setIsMobileMenuOpen(false)
 
     // Then focus the textarea after a short delay to allow scroll to complete
-    setTimeout(() => {
+    setTimeout(()=>{
       // Try multiple selectors to find the textarea
       let textarea = document.querySelector('textarea[placeholder*="Paste your content here"]')
 
       // Fallback selectors if the first one doesn't work
-      if (!textarea) {
+      if (!textarea){
         textarea = document.querySelector('textarea')
       }
 
       if (!textarea) {
-        textarea = document.querySelector('.textarea')
+        textarea= document.querySelector('.textarea')
       }
 
-      if (textarea) {
+      if (textarea){
         textarea.focus()
         // Clear any existing content to start fresh
         textarea.value = ''
@@ -90,11 +90,11 @@ const Header = () => {
           {/* Mobile menu button */}
           <button
             className="md:hidden p-2 rounded-md text-gray-600 hover:text-primary-600 hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={() =>setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}  d="M6 18L18 6M6 6l12 12" />
               ) : (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               )}

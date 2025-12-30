@@ -4,7 +4,7 @@ const crypto = require('crypto');
  * Generate a unique ID for pastes
  * @returns {string} A unique 8-character ID
  */
-const generateId = () => {
+const generateId = () =>{
   return crypto.randomBytes(4).toString('hex');
 };
 
@@ -13,10 +13,10 @@ const generateId = () => {
  * @param {object} req - Express request object
  * @returns {Date} Current time (or test time if in test mode)
  */
-const getCurrentTime = (req) => {
+const getCurrentTime =(req) =>{
   if (process.env.TEST_MODE === '1' && req.headers['x-test-now-ms']) {
     const testTimeMs = parseInt(req.headers['x-test-now-ms']);
-    if (!isNaN(testTimeMs)) {
+    if (!isNaN(testTimeMs)){
       return new Date(testTimeMs);
     }
   }
@@ -25,11 +25,11 @@ const getCurrentTime = (req) => {
 
 /**
  * Check if a paste has expired based on TTL
- * @param {object} paste - Paste object
+ * @param {object}paste - Paste object
  * @param {Date} currentTime - Current time
  * @returns {boolean} True if expired
  */
-const isExpired = (paste, currentTime) => {
+const isExpired =(paste,currentTime) => {
   if (!paste.expires_at) return false;
   return new Date(paste.expires_at) <= currentTime;
 };
@@ -41,7 +41,7 @@ const isExpired = (paste, currentTime) => {
  */
 const isViewLimitExceeded = (paste) => {
   if (!paste.max_views) return false;
-  return paste.view_count >= paste.max_views;
+  return paste.view_count >=paste.max_views;
 };
 
 /**
@@ -52,7 +52,7 @@ const isViewLimitExceeded = (paste) => {
  */
 const calculateExpiryDate = (ttlSeconds, createdAt = new Date()) => {
   if (!ttlSeconds) return null;
-  const expiryDate = new Date(createdAt);
+  const expiryDate= new Date(createdAt);
   expiryDate.setSeconds(expiryDate.getSeconds() + ttlSeconds);
   return expiryDate;
 };
@@ -65,7 +65,7 @@ const calculateExpiryDate = (ttlSeconds, createdAt = new Date()) => {
 const validatePasteInput = (body) => {
   const errors = [];
 
-  if (!body.content || typeof body.content !== 'string' || body.content.trim() === '') {
+  if (!body.content || typeof body.content !== 'string' || body.content.trim() === ''){
     errors.push('content is required and must be a non-empty string');
   }
 
@@ -73,12 +73,12 @@ const validatePasteInput = (body) => {
     if (!Number.isInteger(body.ttl_seconds) || body.ttl_seconds < 1) {
       errors.push('ttl_seconds must be an integer ≥ 1');
     }
-    if (body.ttl_seconds > 31536000) { // 1 year max
+    if (body.ttl_seconds > 31536000){ // 1 year max
       errors.push('ttl_seconds must be ≤ 31536000 (1 year)');
     }
   }
 
-  if (body.max_views !== undefined) {
+  if (body.max_views !== undefined){
     if (!Number.isInteger(body.max_views) || body.max_views < 1) {
       errors.push('max_views must be an integer ≥ 1');
     }
@@ -88,7 +88,7 @@ const validatePasteInput = (body) => {
   }
 
   // Content length validation
-  if (body.content && body.content.length > 1000000) { // 1MB max
+  if (body.content && body.content.length >1000000) { // 1MB max
     errors.push('content must be ≤ 1000000 characters');
   }
 
@@ -103,8 +103,8 @@ const validatePasteInput = (body) => {
  * @param {string} text - Text to escape
  * @returns {string} Escaped HTML
  */
-const escapeHtml = (text) => {
-  const map = {
+const escapeHtml = (text) =>{
+  const map= {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
@@ -121,7 +121,7 @@ const escapeHtml = (text) => {
  * @param {string} baseUrl - Base URL
  * @returns {string} Full URL
  */
-const generateShareUrl = (id, baseUrl) => {
+const generateShareUrl =(id, baseUrl) => {
   const cleanBaseUrl = baseUrl.replace(/\/$/, ''); // Remove trailing slash
   return `${cleanBaseUrl}/p/${id}`;
 };
@@ -142,14 +142,14 @@ const formatDate = (date) => {
  * @param {string} id - Raw ID
  * @returns {string|null} Sanitized ID or null if invalid
  */
-const sanitizeId = (id) => {
+const sanitizeId = (id) =>{
   if (!id || typeof id !== 'string') return null;
   
   // Only allow alphanumeric characters (hex format)
   const sanitized = id.replace(/[^a-fA-F0-9]/g, '');
   
   // Check if it's 8 characters (our standard length)
-  if (sanitized.length !== 8) return null;
+  if (sanitized.length !==8) return null;
   
   return sanitized;
 };

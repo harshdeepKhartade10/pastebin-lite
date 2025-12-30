@@ -10,9 +10,9 @@ const {
   generateShareUrl,
   sanitizeId
 } = require('../utils/helpers');
-const { setPaste, getPaste, updatePaste, deletePaste } = require('../services/redis');
+const { setPaste, getPaste,updatePaste,deletePaste} = require('../services/redis');
 
-const router = express.Router();
+const router =express.Router();
 
 /**
  * Create a new paste
@@ -20,36 +20,36 @@ const router = express.Router();
  */
 router.post('/', async (req, res) => {
   try {
-    const validation = validatePasteInput(req.body);
+    const validation =validatePasteInput(req.body);
     if (!validation.isValid) {
       return res.status(400).json({
         error: 'Invalid input',
-        details: validation.errors
+        details:validation.errors
       });
     }
 
-    const { content, ttl_seconds, max_views } = req.body;
+    const { content,ttl_seconds, max_views } = req.body;
     const id = generateId();
     const createdAt = getCurrentTime(req);
     
-    const pasteData = {
+    const pasteData ={
       id,
       content: content.trim(),
-      ttl_seconds: ttl_seconds || null,
+      ttl_seconds:ttl_seconds || null,
       max_views: max_views || null,
       view_count: 0,
       created_at: createdAt.toISOString(),
-      expires_at: calculateExpiryDate(ttl_seconds, createdAt)?.toISOString() || null
+      expires_at :calculateExpiryDate(ttl_seconds, createdAt)?.toISOString() || null
     };
 
     const success = await setPaste(id, pasteData);
     if (!success) {
       return res.status(500).json({
-        error: 'Failed to create paste'
+        error:'Failed to create paste'
       });
     }
 
-    const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+    const baseUrl =process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
     const pasteUrl = generateShareUrl(id, baseUrl);
 
     res.status(201).json({
@@ -57,8 +57,8 @@ router.post('/', async (req, res) => {
       url: pasteUrl
     });
 
-  } catch (error) {
-    console.error('Create paste error:', error);
+  } catch (error){
+    console.error('Create  paste error:', error);
     res.status(500).json({
       error: 'Internal server error'
     });
@@ -67,14 +67,14 @@ router.post('/', async (req, res) => {
 
 /**
  * Fetch a paste (API endpoint)
- * GET /api/pastes/:id
+ * GET  /api/pastes/:id
  */
 router.get('/:id', async (req, res) => {
   try {
-    const rawId = req.params.id;
-    const id = sanitizeId(rawId);
+    const rawId =req.params.id;
+    const id =sanitizeId(rawId);
     
-    if (!id) {
+    if (!id){
       return res.status(404).json({
         error: 'Paste not found'
       });
@@ -83,7 +83,7 @@ router.get('/:id', async (req, res) => {
     const currentTime = getCurrentTime(req);
     const paste = await getPaste(id);
     
-    if (!paste) {
+    if (!paste){
       return res.status(404).json({
         error: 'Paste not found'
       });
@@ -106,8 +106,8 @@ router.get('/:id', async (req, res) => {
     }
 
     // Increment view count atomically
-    const updatedViewCount = paste.view_count + 1;
-    const updateSuccess = await updatePaste(id, { view_count: updatedViewCount });
+    const updatedViewCount =paste.view_count +1;
+    const updateSuccess = await updatePaste(id, {view_count: updatedViewCount });
 
     if (!updateSuccess) {
       console.error('Failed to update view count for paste:', id);
@@ -115,20 +115,20 @@ router.get('/:id', async (req, res) => {
     }
 
     // Check if this view exceeds the limit and delete if so
-    if (paste.max_views && updatedViewCount >= paste.max_views) {
+    if (paste.max_views && updatedViewCount >=paste.max_views) {
       await deletePaste(id);
     }
 
     // Calculate remaining views
-    const remainingViews = paste.max_views ? Math.max(0, paste.max_views - updatedViewCount) : null;
+    const remainingViews = paste.max_views ? Math.max(0, paste.max_views - updatedViewCount) :null;
 
     res.status(200).json({
       content: paste.content,
       remaining_views: remainingViews,
-      expires_at: paste.expires_at
+      expires_at:paste.expires_at
     });
 
-  } catch (error) {
+  } catch (error){
     console.error('Fetch paste error:', error);
     res.status(500).json({
       error: 'Internal server error'
@@ -137,22 +137,23 @@ router.get('/:id', async (req, res) => {
 });
 
 /**
+ * 
  * View a paste (HTML endpoint)
  * GET /p/:id
  * This will be handled in the main server.js for frontend routing
  * But we'll provide a basic HTML response here for serverless deployment
  */
-router.get('/view/:id', async (req, res) => {
+router.get('/view/:id',async (req, res) => {
   try {
-    const rawId = req.params.id;
+    const rawId= req.params.id;
     const id = sanitizeId(rawId);
     
-    if (!id) {
+    if (!id){
       return res.status(404).send(createErrorPage('Paste Not Found', 'The paste you\'re looking for doesn\'t exist.'));
     }
 
     const currentTime = getCurrentTime(req);
-    const paste = await getPaste(id);
+    const paste =await getPaste(id);
     
     if (!paste) {
       return res.status(404).send(createErrorPage('Paste Not Found', 'The paste you\'re looking for doesn\'t exist.'));
@@ -171,10 +172,10 @@ router.get('/view/:id', async (req, res) => {
     }
 
     // Increment view count
-    const updatedViewCount = paste.view_count + 1;
+    const updatedViewCount =paste.view_count + 1;
     const updateSuccess = await updatePaste(id, { view_count: updatedViewCount });
 
-    if (!updateSuccess) {
+    if (!updateSuccess){
       console.error('Failed to update view count for paste:', id);
     }
 
@@ -183,10 +184,10 @@ router.get('/view/:id', async (req, res) => {
       await deletePaste(id);
     }
 
-    const escapedContent = escapeHtml(paste.content);
+    const escapedContent =escapeHtml(paste.content);
     const remainingViews = paste.max_views ? Math.max(0, paste.max_views - updatedViewCount) : null;
 
-    res.status(200).send(createPastePage(id, escapedContent, paste, updatedViewCount, remainingViews));
+    res.status(200).send(createPastePage(id, escapedContent, paste,updatedViewCount, remainingViews));
 
   } catch (error) {
     console.error('View paste error:', error);
@@ -195,6 +196,8 @@ router.get('/view/:id', async (req, res) => {
 });
 
 /**
+ * 
+
  * Create HTML page for paste viewing
  */
 function createPastePage(id, content, paste, viewCount, remainingViews) {
@@ -206,13 +209,13 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
     <title>View Paste - ${id}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
+        body{ 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        .container {
+        .container{
             max-width: 1000px;
             margin: 0 auto;
             background: white;
@@ -239,7 +242,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             line-height: 1.6;
             white-space: pre-wrap;
             word-wrap: break-word;
-            max-height: 500px;
+            max-height:500px;
             overflow-y: auto;
             margin-bottom: 25px;
         }
@@ -247,7 +250,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            padding: 20px;
+            padding:20px;
             background: #f8f9fa;
             border-radius: 8px;
             font-size: 0.9rem;
@@ -263,7 +266,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
         .btn {
             display: inline-block;
             padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background : linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -279,10 +282,10 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
         @media (max-width: 768px) {
-            .header h1 { font-size: 2rem; }
+            .header h1 { font-size:2rem; }
             .container { margin: 10px; }
             .content-container { padding: 20px; }
-            .meta { grid-template-columns: 1fr; }
+            .meta {grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -307,7 +310,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
                     <span>${new Date(paste.expires_at).toLocaleString()}</span>
                 </div>
                 ` : ''}
-                ${remainingViews !== null ? `
+                ${remainingViews  !== null ? `
                 <div class="meta-item">
                     <span class="meta-label">👁️ Remaining Views</span>
                     <span>${remainingViews}</span>
@@ -332,8 +335,8 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             navigator.clipboard.writeText(content).then(() => {
                 const btn = document.querySelector('.copy-btn');
                 const originalText = btn.textContent;
-                btn.textContent = ' Copied!';
-                setTimeout(() => {
+                btn.textContent =' Copied!';
+                setTimeout(() =>{
                     btn.textContent = originalText;
                 }, 2000);
             }).catch(err => {
@@ -349,7 +352,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
 /**
  * Create error page
  */
-function createErrorPage(title, message) {
+function createErrorPage(title,message) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -362,14 +365,14 @@ function createErrorPage(title, message) {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
+            display:flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
         .error-container {
             background: white;
-            padding: 40px;
+            padding : 40px;
             border-radius: 12px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             text-align: center;
@@ -385,10 +388,10 @@ function createErrorPage(title, message) {
             color: white;
             text-decoration: none;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight:600;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn:hover {
+        .btn:hover{
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }

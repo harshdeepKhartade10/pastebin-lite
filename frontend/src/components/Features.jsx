@@ -2,18 +2,18 @@ const Features = () => {
   const features = [
     {
       icon: '⚡',
-      title: 'Lightning Fast',
+      title:'Lightning Fast',
       description: 'Create and share pastes instantly with our optimized infrastructure'
     },
     {
-      icon: '🔒',
+      icon:'🔒',
       title: 'Secure & Private',
       description: 'Your data is encrypted and we never track your content'
     },
     {
       icon: '⏰',
       title: 'Auto-Expiration',
-      description: 'Set custom TTL to automatically delete pastes after specified time'
+      description : 'Set custom TTL to automatically delete pastes after specified time'
     },
     {
       icon: '👁️',
@@ -23,7 +23,7 @@ const Features = () => {
     {
       icon: '📱',
       title: 'Mobile Friendly',
-      description: 'Works perfectly on all devices with responsive design'
+      description:'Works perfectly on all devices with responsive design'
     },
     {
       icon: '🎨',
@@ -52,7 +52,7 @@ const Features = () => {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {features.map((feature, index) => (
+        {features.map((feature, index) =>(
           <div
             key={index}
             className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow glass-effect animate-slide-up"

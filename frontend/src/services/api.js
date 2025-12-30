@@ -5,41 +5,41 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pastebin-lite-back
 
 // Create axios instance with deployment-ready configuration
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL:API_BASE_URL,
   timeout: 15000, // Increased timeout for deployment
-  headers: {
+  headers:{
     'Content-Type': 'application/json'
   },
   // Enable credentials for cross-origin requests if needed
-  withCredentials: false
+  withCredentials:false
 })
 
 // Request interceptor for deployment
 api.interceptors.request.use(
-  (config) => {
+  (config) =>{
     // Add deployment-specific headers (lowercase for CORS compatibility)
     config.headers['x-client-version'] = '1.0.0'
     config.headers['x-client-platform'] = 'web'
     
     // Log in development
     if (import.meta.env.DEV) {
-      console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`)
+      console.log(` API Request: ${config.method?.toUpperCase()} ${config.url}`)
     }
     
     return config
   },
   (error) => {
-    console.error('❌ Request interceptor error:', error)
+    console.error(' Request interceptor error:', error)
     return Promise.reject(error)
   }
 )
 
 // Enhanced response interceptor for deployment
 api.interceptors.response.use(
-  (response) => {
+  (response) =>{
     // Log successful responses in development
     if (import.meta.env.DEV) {
-      console.log(`✅ API Response: ${response.status} ${response.config.url}`)
+      console.log(` API Response: ${response.status} ${response.config.url}`)
     }
     
     return response.data
@@ -49,22 +49,22 @@ api.interceptors.response.use(
     const originalRequest = error.config
     
     // Log errors in development
-    if (import.meta.env.DEV) {
-      console.error(`❌ API Error: ${error.response?.status} ${originalRequest?.url}`, error.response?.data)
+    if (import.meta.env.DEV){
+      console.error(` API Error: ${error.response?.status} ${originalRequest?.url}`, error.response?.data)
     }
     
     // Handle specific deployment scenarios
-    if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+    if (error.code ==='ECONNREFUSED' || error.code === 'ERR_NETWORK') {
       error.message = 'Unable to connect to server. Please check your internet connection.'
     } else if (error.response?.status === 429) {
       error.message = 'Too many requests. Please wait a moment and try again.'
     } else if (error.response?.status === 503) {
       error.message = 'Service temporarily unavailable. Please try again later.'
-    } else if (error.response?.status === 404) {
+    } else if (error.response?.status ===404) {
       error.message = 'Paste not found or has expired.'
     } else if (error.response?.status === 400) {
       error.message = error.response?.data?.error || 'Invalid request data.'
-    } else if (error.response?.status >= 500) {
+    } else if (error.response?.status >= 500){
       error.message = 'Server error. Please try again later.'
     } else if (error.code === 'ECONNABORTED') {
       error.message = 'Request timeout. Please check your connection and try again.'
@@ -77,7 +77,7 @@ api.interceptors.response.use(
 )
 
 // Enhanced API functions with deployment-specific error handling
-export const createPaste = async (pasteData) => {
+export const createPaste =async (pasteData) => {
   try {
     const response = await api.post('/api/pastes', pasteData)
     
@@ -87,7 +87,7 @@ export const createPaste = async (pasteData) => {
     }
     
     return response
-  } catch (error) {
+  } catch (error){
     console.error('Create paste error:', error)
     
     // Add deployment-specific context
@@ -99,16 +99,16 @@ export const createPaste = async (pasteData) => {
   }
 }
 
-export const getPaste = async (id) => {
+export const getPaste = async (id)=>{
   try {
-    if (!id) {
+    if (!id){
       throw new Error('Paste ID is required')
     }
     
     const response = await api.get(`/api/pastes/${id}`)
     
     // Validate response for deployment
-    if (!response.content) {
+    if (!response.content){
       throw new Error('Paste content not found')
     }
     
@@ -119,7 +119,7 @@ export const getPaste = async (id) => {
   }
 }
 
-export const checkHealth = async () => {
+export const checkHealth = async ()=> {
   try {
     const response = await api.get('/api/healthz')
     
@@ -129,11 +129,11 @@ export const checkHealth = async () => {
     }
     
     return response
-  } catch (error) {
+  } catch (error){
     console.error('Health check error:', error)
     
     // Health check failures are critical in deployment
-    if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+    if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK'){
       error.message = 'Backend service is unavailable. Please try again later.'
     }
     
@@ -142,13 +142,13 @@ export const checkHealth = async () => {
 }
 
 // New deployment-specific utility function
-export const validateBackendConnection = async () => {
+export const validateBackendConnection = async () =>{
   try {
     await checkHealth()
-    return { connected: true, message: 'Backend connection successful' }
+    return { connected:true, message: 'Backend connection successful' }
   } catch (error) {
     return { 
-      connected: false, 
+      connected:false, 
       message: error.message || 'Backend connection failed',
       error 
     }

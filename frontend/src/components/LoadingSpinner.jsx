@@ -6,7 +6,7 @@ const LoadingSpinner = ({ size = 'medium' }) => {
   }
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center  justify-center">
       <div className={`loading-spinner ${sizeClasses[size]}`}></div>
     </div>
   )

@@ -7,22 +7,22 @@ const PasteViewer = ({ paste }) => {
   const navigate = useNavigate()
   const [copied, setCopied] = useState(false)
 
-  const handleCopyToClipboard = async () => {
+  const handleCopyToClipboard =async () =>{
     try {
       await navigator.clipboard.writeText(paste.content)
       setCopied(true)
       toast.success('Content copied to clipboard!')
-      setTimeout(() => setCopied(false), 2000)
-    } catch (error) {
+      setTimeout(() =>setCopied(false), 2000)
+    } catch (error){
       toast.error('Failed to copy to clipboard')
     }
   }
 
-  const handleCreateNew = () => {
+  const handleCreateNew = () =>{
     navigate('/')
   }
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = async () =>{
     try {
       const url = window.location.href
       await navigator.clipboard.writeText(url)
@@ -32,17 +32,17 @@ const PasteViewer = ({ paste }) => {
     }
   }
 
-  const getExpirationInfo = () => {
+  const getExpirationInfo = () =>{
     if (!paste.expires_at) return null
 
     const expiryDate = new Date(paste.expires_at)
     const now = new Date()
-    const isExpired = expiryDate <= now
+    const isExpired = expiryDate <=now
 
     return {
       date: expiryDate,
       isExpired,
-      timeAgo: formatDistanceToNow(expiryDate, { addSuffix: true })
+      timeAgo: formatDistanceToNow(expiryDate,{ addSuffix: true })
     }
   }
 
@@ -57,9 +57,9 @@ const PasteViewer = ({ paste }) => {
             <h1 className="text-3xl font-bold text-gray-800 mb-2">📋 View Paste</h1>
             <div className="flex flex-wrap gap-4 text-sm text-gray-600">
               <span>🆔 ID: {window.location.pathname.split('/').pop()}</span>
-              <span>📅 Created: {formatDistanceToNow(new Date(paste.created_at), { addSuffix: true })}</span>
-              {paste.remaining_views !== null && (
-                <span>👁️ Views: {paste.remaining_views} remaining</span>
+              <span>📅 Created:{formatDistanceToNow(new Date(paste.created_at), { addSuffix: true })}</span>
+              {paste.remaining_views !== null &&(
+                <span>👁️ Views:{paste.remaining_views} remaining</span>
               )}
             </div>
           </div>
@@ -91,7 +91,7 @@ const PasteViewer = ({ paste }) => {
               onClick={handleCopyToClipboard}
               className={`btn ${copied ? 'btn-secondary' : 'btn-primary'} px-4 py-2 text-sm`}
             >
-              {copied ? ' Copied!' : ' Copy Content'}
+              {copied ? ' Copied!' :' Copy Content'}
             </button>
           </div>
         </div>
@@ -134,16 +134,16 @@ const PasteViewer = ({ paste }) => {
           </div>
 
           <div className="space-y-3">
-            {expirationInfo && (
+            {expirationInfo &&(
               <div className="flex justify-between py-2 border-b border-gray-100">
                 <span className="text-gray-600">Expires:</span>
                 <span className={`font-medium ${expirationInfo.isExpired ? 'text-red-600' : 'text-green-600'}`}>
-                  {expirationInfo.isExpired ? 'Expired' : expirationInfo.timeAgo}
+                  {expirationInfo.isExpired ?'Expired' : expirationInfo.timeAgo}
                 </span>
               </div>
             )}
 
-            {paste.remaining_views !== null && (
+            {paste.remaining_views !== null &&(
               <div className="flex justify-between py-2 border-b border-gray-100">
                 <span className="text-gray-600">Remaining Views:</span>
                 <span className={`font-medium ${paste.remaining_views === 0 ? 'text-red-600' : 'text-green-600'}`}>
@@ -163,7 +163,7 @@ const PasteViewer = ({ paste }) => {
       </div>
 
       {/* Warning Messages */}
-      {expirationInfo?.isExpired && (
+      {expirationInfo?.isExpired &&(
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center">
             <span className="text-red-600 mr-2">⚠️</span>
@@ -172,7 +172,7 @@ const PasteViewer = ({ paste }) => {
         </div>
       )}
 
-      {paste.remaining_views === 0 && (
+      {paste.remaining_views === 0 &&(
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <div className="flex items-center">
             <span className="text-yellow-600 mr-2">⚠️</span>

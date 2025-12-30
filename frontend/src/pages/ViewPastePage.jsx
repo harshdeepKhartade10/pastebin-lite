@@ -11,18 +11,18 @@ const ViewPastePage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [paste, setPaste] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [isLoading,setIsLoading] =useState(true)
+  const [error, setError] =useState(null)
 
   useEffect(() => {
-    const fetchPaste = async () => {
+    const fetchPaste = async () =>{
       try {
         setIsLoading(true)
-        const response = await getPaste(id)
+        const response= await getPaste(id)
         setPaste(response)
       } catch (err) {
         console.error('Error fetching paste:', err)
-        const errorMessage = err.response?.data?.error || 'Paste not found'
+        const errorMessage =err.response?.data?.error || 'Paste not found'
         setError(errorMessage)
         toast.error(errorMessage)
       } finally {
@@ -35,7 +35,7 @@ const ViewPastePage = () => {
     }
   }, [id])
 
-  const handleCreateNew = () => {
+  const handleCreateNew = () =>{
     navigate('/')
   }
 

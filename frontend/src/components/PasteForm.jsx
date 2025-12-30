@@ -8,22 +8,22 @@ const PasteForm = ({ onSubmit, isLoading }) => {
     max_views: ''
   })
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] =useState({})
 
   const validateForm = () => {
     const newErrors = {}
 
     if (!formData.content.trim()) {
       newErrors.content = 'Content is required'
-    } else if (formData.content.length > 1000000) {
+    } else if (formData.content.length >1000000) {
       newErrors.content = 'Content must be less than 1MB'
     }
 
-    if (formData.ttl_seconds && (isNaN(formData.ttl_seconds) || formData.ttl_seconds < 1)) {
+    if (formData.ttl_seconds && (isNaN(formData.ttl_seconds) || formData.ttl_seconds < 1)){
       newErrors.ttl_seconds = 'TTL must be a positive number'
     }
 
-    if (formData.max_views && (isNaN(formData.max_views) || formData.max_views < 1)) {
+    if (formData.max_views && (isNaN(formData.max_views) || formData.max_views <1)) {
       newErrors.max_views = 'Max views must be a positive number'
     }
 
@@ -31,7 +31,7 @@ const PasteForm = ({ onSubmit, isLoading }) => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) =>{
     e.preventDefault()
 
     if (!validateForm()) {
@@ -39,7 +39,7 @@ const PasteForm = ({ onSubmit, isLoading }) => {
       return
     }
 
-    const submitData = {
+    const submitData ={
       content: formData.content.trim(),
       ...(formData.ttl_seconds && { ttl_seconds: parseInt(formData.ttl_seconds) }),
       ...(formData.max_views && { max_views: parseInt(formData.max_views) })
@@ -48,35 +48,35 @@ const PasteForm = ({ onSubmit, isLoading }) => {
     onSubmit(submitData)
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange =(e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData(prev =>({
       ...prev,
       [name]: value
     }))
 
     // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => ({
+    if (errors[name]){
+      setErrors(prev=> ({
         ...prev,
         [name]: ''
       }))
     }
   }
 
-  const presetOptions = [
+  const presetOptions =[
     { label: 'No expiry', ttl: '' },
     { label: '1 hour', ttl: 3600 },
-    { label: '1 day', ttl: 86400 },
+    { label: '1 day',ttl: 86400 },
     { label: '1 week', ttl: 604800 },
     { label: '1 month', ttl: 2592000 }
   ]
 
   const viewLimitOptions = [
     { label: 'Unlimited views', max: '' },
-    { label: '1 view', max: 1 },
+    { label: '1 view', max:1 },
     { label: '5 views', max: 5 },
-    { label: '10 views', max: 10 },
+    { label: '10 views' , max: 10 },
     { label: '25 views', max: 25 }
   ]
 
@@ -120,7 +120,7 @@ const PasteForm = ({ onSubmit, isLoading }) => {
             className="input"
             disabled={isLoading}
           >
-            {presetOptions.map(option => (
+            {presetOptions.map(option=> (
               <option key={option.label} value={option.ttl}>
                 {option.label}
               </option>
@@ -146,13 +146,13 @@ const PasteForm = ({ onSubmit, isLoading }) => {
             className="input"
             disabled={isLoading}
           >
-            {viewLimitOptions.map(option => (
+            {viewLimitOptions.map(option =>(
               <option key={option.label} value={option.max}>
                 {option.label}
               </option>
             ))}
           </select>
-          {formData.max_views && (
+          {formData.max_views &&(
             <p className="mt-1 text-sm text-gray-500">
               Will be deleted after {formData.max_views} views
             </p>
@@ -167,10 +167,10 @@ const PasteForm = ({ onSubmit, isLoading }) => {
           disabled={isLoading}
           className="btn btn-primary px-8 py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? (
+          {isLoading ?(
             <>
               <span className="loading-spinner w-5 h-5 mr-2 inline-block"></span>
-              Creating...
+              Creating....
             </>
           ) : (
             <>

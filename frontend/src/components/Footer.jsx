@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear()
+const Footer = () =>{
+  const currentYear =new Date().getFullYear()
 
   return (
     <footer className="bg-gray-900 text-white mt-16">
@@ -14,7 +14,7 @@ const Footer = () => {
               <span>Pastebin Lite</span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
-              A modern, fast, and secure pastebin application for developers and teams.
+              A modern, fast,and secure pastebin application for developers and teams.
               Share code snippets and text with ease.
             </p>
             <div className="flex space-x-4">
@@ -49,7 +49,7 @@ const Footer = () => {
                 <Link
                   to="/"
                   className="text-gray-400 hover:text-white transition-colors"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() =>window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   Create Paste
                 </Link>
@@ -58,9 +58,9 @@ const Footer = () => {
                 <a
                   href="#features"
                   className="text-gray-400 hover:text-white transition-colors"
-                  onClick={(e) => {
+                  onClick={(e)=> {
                     e.preventDefault()
-                    const featuresElement = document.getElementById('features')
+                    const featuresElement =document.getElementById('features')
                     if (featuresElement) {
                       featuresElement.scrollIntoView({ behavior: 'smooth' })
                     }
@@ -102,7 +102,7 @@ const Footer = () => {
                 </span>
               </li>
               <li>
-                <span className="text-gray-400 text-sm">
+                <span  className="text-gray-400 text-sm">
                   GET /api/pastes/:id
                 </span>
               </li> */}
@@ -114,13 +114,13 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} Pastebin Lite. All rights reserved.
+              © {currentYear} Harshdeep Khartade Pastebin Lite. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
-                onClick={(e) => {
+                onClick={(e) =>{
                   e.preventDefault()
                   alert('Privacy policy will be available soon.')
                 }}
@@ -130,7 +130,7 @@ const Footer = () => {
               <a
                 href="#"
                 className="text-gray-400 hover:text-white transition-colors"
-                onClick={(e) => {
+                onClick={(e)=> {
                   e.preventDefault()
                   alert('Terms and conditions will be available soon.')
                 }}

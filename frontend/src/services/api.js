@@ -1,8 +1,11 @@
 import axios from 'axios'
 
+// Use environment variable for API base URL with fallback to deployed backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pastebin-lite-backend-6uu2.onrender.com'
+
 // Create axios instance with default configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

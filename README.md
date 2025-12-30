@@ -1,3 +1,13 @@
+## 🌐 Live Demo
+
+**Frontend**: [https://pastebin-lite-phi.vercel.app](https://pastebin-lite-phi.vercel.app)
+
+**Backend API**: [https://pastebin-lite-backend-6uu2.onrender.com](https://pastebin-lite-backend-6uu2.onrender.com)
+
+**Health Check**: [https://pastebin-lite-backend-6uu2.onrender.com/api/healthz](https://pastebin-lite-backend-6uu2.onrender.com/api/healthz)
+
+---
+
 # Pastebin Lite
 
 A professional-grade Pastebin application built with the MERN stack, featuring advanced security, modern UI, and comprehensive functionality.

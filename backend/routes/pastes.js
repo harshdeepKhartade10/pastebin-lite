@@ -322,7 +322,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
         
         <div class="actions">
             <button class="btn copy-btn" onclick="copyToClipboard()"> Copy Content</button>
-            <a href="/" class="btn">✨ Create New Paste</a>
+            <a href="${process.env.BASE_URL || 'https://pastebin-lite-phi.vercel.app'}" class="btn">✨ Create New Paste</a>
         </div>
     </div>
 
@@ -399,7 +399,7 @@ function createErrorPage(title, message) {
         <div class="error-icon"></div>
         <h1 class="error-title">${title}</h1>
         <p class="error-message">${message}</p>
-        <a href="/" class="btn">✨ Create New Paste</a>
+        <a href="${process.env.BASE_URL || 'https://pastebin-lite-phi.vercel.app'}" class="btn">✨ Create New Paste</a>
     </div>
 </body>
 </html>`;

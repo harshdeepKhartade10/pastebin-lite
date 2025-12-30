@@ -16,8 +16,9 @@ const HomePage = () => {
     try {
       const response = await createPaste(pasteData)
       toast.success('Paste created successfully!')
-      // Navigate to the backend HTML page instead of React route
-      window.location.href = response.url
+      // Navigate to backend HTML page using environment variable or fallback
+      const backendUrl = import.meta.env.VITE_API_URL || 'https://pastebin-lite-backend-6uu2.onrender.com'
+      window.location.href = `${backendUrl}/p/${response.id}`
     } catch (error) {
       console.error('Error creating paste:', error)
       const errorMessage = error.response?.data?.error || 'Failed to create paste'

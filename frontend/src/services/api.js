@@ -8,8 +8,7 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000, // Increased timeout for deployment
   headers: {
-    'Content-Type': 'application/json',
-    'User-Agent': 'Pastebin-Lite-Frontend/1.0'
+    'Content-Type': 'application/json'
   },
   // Enable credentials for cross-origin requests if needed
   withCredentials: false
@@ -18,9 +17,9 @@ const api = axios.create({
 // Request interceptor for deployment
 api.interceptors.request.use(
   (config) => {
-    // Add deployment-specific headers
-    config.headers['X-Client-Version'] = '1.0.0'
-    config.headers['X-Client-Platform'] = 'web'
+    // Add deployment-specific headers (lowercase for CORS compatibility)
+    config.headers['x-client-version'] = '1.0.0'
+    config.headers['x-client-platform'] = 'web'
     
     // Log in development
     if (import.meta.env.DEV) {

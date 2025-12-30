@@ -130,18 +130,28 @@ app.get('/p/:id', async (req, res) => {
   }
 });
 
-// Serve frontend static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../frontend/dist'));
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found' });
+});
+
+// Root route - redirect to frontend in production
+app.get('/', (req, res) => {
+  const frontendUrl = process.env.BASE_URL || 'https://pastebin-lite-phi.vercel.app';
+  res.redirect(301, frontendUrl);
+});
+
+// Catch-all handler for non-API routes - redirect to frontend
+app.get('*', (req, res) => {
+  // Don't redirect API routes
+  if (req.path.startsWith('/api/') || req.path.startsWith('/p/')) {
+    return res.status(404).json({ error: 'Route not found' });
+  }
   
-  // Handle React Router - serve index.html for all non-API routes
-  app.get('*', (req, res) => {
-    if (req.path.startsWith('/api/')) {
-      return res.status(404).json({ error: 'API endpoint not found' });
-    }
-    res.sendFile('index.html', { root: '../frontend/dist' });
-  });
-}
+  // Redirect all other routes to frontend
+  const frontendUrl = process.env.BASE_URL || 'https://pastebin-lite-phi.vercel.app';
+  res.redirect(301, frontendUrl);
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

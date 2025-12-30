@@ -91,7 +91,7 @@ const PasteViewer = ({ paste }) => {
               onClick={handleCopyToClipboard}
               className={`btn ${copied ? 'btn-secondary' : 'btn-primary'} px-4 py-2 text-sm`}
             >
-              {copied ? '✅ Copied!' : '📋 Copy Content'}
+              {copied ? ' Copied!' : ' Copy Content'}
             </button>
           </div>
         </div>
@@ -107,7 +107,7 @@ const PasteViewer = ({ paste }) => {
 
       {/* Metadata */}
       <div className="bg-white rounded-xl shadow-lg p-6 glass-effect">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">📊 Paste Information</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4"> Paste Information</h3>
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-3">

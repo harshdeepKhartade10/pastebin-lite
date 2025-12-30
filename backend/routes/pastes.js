@@ -321,7 +321,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
         </div>
         
         <div class="actions">
-            <button class="btn copy-btn" onclick="copyToClipboard()">📋 Copy Content</button>
+            <button class="btn copy-btn" onclick="copyToClipboard()"> Copy Content</button>
             <a href="/" class="btn">✨ Create New Paste</a>
         </div>
     </div>
@@ -332,7 +332,7 @@ function createPastePage(id, content, paste, viewCount, remainingViews) {
             navigator.clipboard.writeText(content).then(() => {
                 const btn = document.querySelector('.copy-btn');
                 const originalText = btn.textContent;
-                btn.textContent = '✅ Copied!';
+                btn.textContent = ' Copied!';
                 setTimeout(() => {
                     btn.textContent = originalText;
                 }, 2000);
@@ -396,7 +396,7 @@ function createErrorPage(title, message) {
 </head>
 <body>
     <div class="error-container">
-        <div class="error-icon">😞</div>
+        <div class="error-icon"></div>
         <h1 class="error-title">${title}</h1>
         <p class="error-message">${message}</p>
         <a href="/" class="btn">✨ Create New Paste</a>

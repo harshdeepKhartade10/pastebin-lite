@@ -26,7 +26,7 @@ const NotFoundPage = () => {
                 onClick={handleGoHome}
                 className="btn btn-primary text-lg px-8 py-3"
               >
-                🏠 Go Home
+              Go Home
               </button>
               <div className="text-gray-500">
                 Or create a new paste to get started

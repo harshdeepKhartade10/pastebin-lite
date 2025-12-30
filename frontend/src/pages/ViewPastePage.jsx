@@ -58,7 +58,7 @@ const ViewPastePage = () => {
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-white rounded-2xl shadow-xl p-8 glass-effect">
-              <div className="text-6xl mb-4">😞</div>
+              <div className="text-6xl mb-4"></div>
               <h1 className="text-3xl font-bold text-gray-800 mb-4">Paste Not Found</h1>
               <p className="text-gray-600 mb-8">
                 {error}

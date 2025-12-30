@@ -71,10 +71,10 @@ const Features = () => {
 
       {/* Stats Section */}
       <div className="mt-16 bg-gradient-to-r from-primary-600 to-purple-600 rounded-2xl p-8 text-white text-center">
-        <h3 className="text-2xl font-bold mb-6">🚀 Trusted by Developers</h3>
+        <h3 className="text-2xl font-bold mb-6"> Trusted by Developers</h3>
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <div className="text-3xl font-bold mb-2">10K+</div>
+            <div className="text-3xl font-bold mb-2">100+</div>
             <div className="text-primary-100">Pastes Created</div>
           </div>
           <div>

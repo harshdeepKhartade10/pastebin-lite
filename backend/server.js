@@ -170,9 +170,9 @@ app.use('*', (req, res) => {
 
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📊 Health check: http://localhost:${PORT}/api/healthz`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(` Server running on port ${PORT}`);
+    console.log(` Health check: http://localhost:${PORT}/api/healthz`);
+    console.log(` Environment: ${process.env.NODE_ENV}`);
   });
 }
 
@@ -363,7 +363,7 @@ function createErrorPage(title, message) {
 </head>
 <body>
     <div class="error-container">
-        <div class="error-icon">😞</div>
+        <div class="error-icon"></div>
         <h1 class="error-title">${title}</h1>
         <p class="error-message">${message}</p>
         <a href="${process.env.BASE_URL || 'http://localhost:5173'}" class="btn">✨ Create New Paste</a>

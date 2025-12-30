@@ -29,24 +29,24 @@ const getRedisClient = async () => {
       });
 
       client.on('connect', () => {
-        console.log('✅ Redis Client Connected');
+        console.log(' Redis Client Connected');
         isConnected = true;
       });
 
       client.on('disconnect', () => {
-        console.log('❌ Redis Client Disconnected');
+        console.log(' Redis Client Disconnected');
         isConnected = false;
       });
 
       client.on('ready', () => {
-        console.log('🚀 Redis Client Ready');
+        console.log(' Redis Client Ready');
         isConnected = true;
       });
 
       await client.connect();
     } catch (error) {
-      console.error('❌ Failed to connect to Redis:', error);
-      console.log('🔄 Falling back to in-memory store');
+      console.error(' Failed to connect to Redis:', error);
+      console.log(' Falling back to in-memory store');
       isConnected = true; // Pretend we're connected for fallback
       return null;
     }

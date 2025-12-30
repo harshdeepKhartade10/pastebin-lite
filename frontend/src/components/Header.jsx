@@ -1,8 +1,12 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    setIsMobileMenuOpen(false)
   }
 
   const scrollToFeatures = () => {
@@ -10,11 +14,13 @@ const Header = () => {
     if (featuresElement) {
       featuresElement.scrollIntoView({ behavior: 'smooth' })
     }
+    setIsMobileMenuOpen(false)
   }
 
   const focusPasteInput = () => {
     // First scroll to top smoothly
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    setIsMobileMenuOpen(false)
 
     // Then focus the textarea after a short delay to allow scroll to complete
     setTimeout(() => {
@@ -59,6 +65,7 @@ const Header = () => {
             <span>Pastebin Lite</span>
           </Link>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <button
               onClick={scrollToTop}
@@ -81,11 +88,43 @@ const Header = () => {
           </nav>
 
           {/* Mobile menu button */}
-          <button className="md:hidden p-2 rounded-md text-gray-600 hover:text-primary-600 hover:bg-gray-100">
+          <button
+            className="md:hidden p-2 rounded-md text-gray-600 hover:text-primary-600 hover:bg-gray-100 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        <div className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${isMobileMenuOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+          }`}>
+          <nav className="py-4 space-y-2">
+            <button
+              onClick={scrollToTop}
+              className="block w-full text-left px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors font-medium"
+            >
+              Home
+            </button>
+            <button
+              onClick={scrollToFeatures}
+              className="block w-full text-left px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors font-medium"
+            >
+              Features
+            </button>
+            <button
+              onClick={focusPasteInput}
+              className="block w-full text-left px-4 py-2 text-primary-600 hover:bg-primary-50 rounded-md transition-colors font-medium"
+            >
+              Create Paste
+            </button>
+          </nav>
         </div>
       </div>
     </header>

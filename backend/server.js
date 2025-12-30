@@ -51,7 +51,7 @@ app.use(cors({
     : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-test-now-ms']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-test-now-ms', 'x-client-version', 'x-client-platform']
 }));
 
 // Body parsing middleware
